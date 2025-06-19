@@ -1,29 +1,58 @@
+// Copyright (c) 2025 Dineth. All Rights Reserved.
+//
+// This module contains SQL query builders for user operations.
+// All queries are parameterized to prevent SQL injection attacks.
+
 import ballerina/sql;
 
+# Builds query to retrieve all users from the database
+#
+# + return - Parameterized SQL query for selecting all users
 isolated function getAllUsersQueries() returns sql:ParameterizedQuery =>
 `
     SELECT * FROM users
 `;
 
+# Builds query to retrieve a specific user by ID
+#
+# + id - Unique identifier of the user
+# + return - Parameterized SQL query for selecting user by ID
 isolated function getUserByIdQueries(string id) returns sql:ParameterizedQuery =>
 `
 SELECT * FROM users WHERE id = ${id}
 `;
 
+# Builds query to search for a user by name
+#
+# + name - Name of the user to search for
+# + return - Parameterized SQL query for searching user by name
 isolated function searchUserQueries(string name) returns sql:ParameterizedQuery =>
 `
 SELECT * FROM users WHERE name = ${name}
 `;
 
+# Builds query to insert a new user into the database
+#
+# + user - User record containing user details
+# + return - Parameterized SQL query for inserting user
 isolated function addUserQueries(User user) returns sql:ParameterizedQuery =>
 `
 INSERT INTO users (id, name, age) VALUES (${user.id}, ${user.name}, ${user.age})
 `;
 
+# Builds query to find a user by ID (alias for getUserByIdQueries)
+#
+# + id - Unique identifier of the user
+# + return - Parameterized SQL query for finding user by ID
 isolated function findUserQuery(string id) returns sql:ParameterizedQuery => `
 SELECT * FROM users WHERE id = ${id}
 `;
 
+# Builds query to update an existing user's information
+#
+# + id - Unique identifier of the user to update
+# + user - Updated user details
+# + return - Parameterized SQL query for updating user
 isolated function updateUserQueries(string id, User user) returns sql:ParameterizedQuery => `
 
         UPDATE users 
@@ -33,6 +62,10 @@ isolated function updateUserQueries(string id, User user) returns sql:Parameteri
     
 `;
 
+# Builds query to delete a user from the database
+#
+# + id - Unique identifier of the user to delete
+# + return - Parameterized SQL query for deleting user
 isolated function deleteUserQuery(string id) returns sql:ParameterizedQuery => `
 DELETE FROM users WHERE id = ${id}`;
 
