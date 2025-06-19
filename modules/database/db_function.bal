@@ -20,8 +20,23 @@ public isolated function getAllUsers() returns User[]|error {
 #
 # + id - Unique identifier of the user to retrieve
 # + return - User record or error if user not found or operation fails
-public isolated function getUserById(string id) returns User|error {
+public isolated function getUserById(string id) returns http:Response|error|User {
+    http:Response response = new;
+
     User|sql:Error foundUser = db->queryRow(getUserByIdQueries(id));
+
+    if foundUser is sql:NoRowsError {
+        response.statusCode = http:STATUS_NOT_FOUND;
+        response.setPayload({
+            status: "Error",
+            messsage: "User not found",
+            searchUserId: id
+        });
+
+        return response;
+    } else if foundUser is sql:Error {
+        return error("Error fetching user: " + foundUser.message());
+    }
 
     return foundUser;
 }

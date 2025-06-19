@@ -5,7 +5,7 @@ USE user;
 CREATE TABLE IF NOT EXISTS users (
     id INT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    age int,
+    age int
 );
 
 INSERT INTO users (id, name, age) VALUES (1, 'Alice', 30);

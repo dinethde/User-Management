@@ -12,3 +12,18 @@ public type User record {
     string name;
     int age;
 };
+
+# Database configuration record for connection parameters
+#
+# + host - Database server hostname
+# + port - Database server port number
+# + database - Name of the database to connect to
+# + user - Username for database authentication
+# + password - Password for database authentication
+public type DatabaseConfig record {
+    string host;
+    int port;
+    string database;
+    string user;
+    string password;
+};
