@@ -1,0 +1,13 @@
+POST http://localhost:9090/users
+Content-Type: application/json
+{
+    "id": "4", "name": "David", "age": 28
+}
+
+HTTP/1.1 201  - Created
+content-type: application/json
+connection: close
+server: ballerina
+date: Tue, 17 Jun 2025 17:06:57 +0530
+content-encoding: gzip
+content-length: 110
