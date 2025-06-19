@@ -5,6 +5,23 @@
 
 import ballerina/sql;
 
+isolated function initiateDb() returns sql:ParameterizedQuery =>
+`
+CREATE DATABASE IF NOT EXISTS user;
+
+USE user;
+
+CREATE TABLE IF NOT EXISTS users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    age int
+);
+
+INSERT INTO users (name, age) VALUES ('Alice', 30);
+INSERT INTO users (name, age) VALUES ('Bob', 25);
+INSERT INTO users (name, age) VALUES ('Lithika', 45);
+`;
+
 # Builds query to retrieve all users from the database
 #
 # + return - Parameterized SQL query for selecting all users
@@ -17,7 +34,7 @@ isolated function getAllUsersQueries() returns sql:ParameterizedQuery =>
 #
 # + id - Unique identifier of the user
 # + return - Parameterized SQL query for selecting user by ID
-isolated function getUserByIdQueries(string id) returns sql:ParameterizedQuery =>
+isolated function getUserByIdQueries(int id) returns sql:ParameterizedQuery =>
 `
 SELECT * FROM users WHERE id = ${id}
 `;
@@ -35,16 +52,16 @@ SELECT * FROM users WHERE name = ${name}
 #
 # + user - User record containing user details
 # + return - Parameterized SQL query for inserting user
-isolated function addUserQueries(User user) returns sql:ParameterizedQuery =>
+isolated function addUserQueries(UpdateUser user) returns sql:ParameterizedQuery =>
 `
-INSERT INTO users (id, name, age) VALUES (${user.id}, ${user.name}, ${user.age})
+INSERT INTO users (name, age) VALUES (${user.name}, ${user.age})
 `;
 
 # Builds query to find a user by ID (alias for getUserByIdQueries)
 #
 # + id - Unique identifier of the user
 # + return - Parameterized SQL query for finding user by ID
-isolated function findUserQuery(string id) returns sql:ParameterizedQuery => `
+isolated function findUserQuery(int id) returns sql:ParameterizedQuery => `
 SELECT * FROM users WHERE id = ${id}
 `;
 
@@ -53,7 +70,7 @@ SELECT * FROM users WHERE id = ${id}
 # + id - Unique identifier of the user to update
 # + user - Updated user details
 # + return - Parameterized SQL query for updating user
-isolated function updateUserQueries(string id, User user) returns sql:ParameterizedQuery => `
+isolated function updateUserQueries(int id, UpdateUser user) returns sql:ParameterizedQuery => `
 
         UPDATE users 
         SET name = ${user.name}, 
@@ -66,6 +83,6 @@ isolated function updateUserQueries(string id, User user) returns sql:Parameteri
 #
 # + id - Unique identifier of the user to delete
 # + return - Parameterized SQL query for deleting user
-isolated function deleteUserQuery(string id) returns sql:ParameterizedQuery => `
+isolated function deleteUserQuery(int id) returns sql:ParameterizedQuery => `
 DELETE FROM users WHERE id = ${id}`;
 
