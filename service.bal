@@ -27,7 +27,7 @@ service / on httpListener {
     #
     # + id - Unique identifier of the user to retrieve
     # + return - User record or error if user not found or operation fails
-    resource function get user/[string id]() returns db:User|error {
+    resource function get user/[string id]() returns db:User|error|http:Response {
         return check db:getUserById(id);
     }
 
