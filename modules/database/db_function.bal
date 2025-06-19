@@ -2,8 +2,6 @@
 //
 // This module contains database operations for user management.
 // All functions are isolated for concurrent execution safety.
-
-import ballerina/http;
 import ballerina/sql;
 
 # Retrieves all users from the database
@@ -20,23 +18,9 @@ public isolated function getAllUsers() returns User[]|error {
 #
 # + id - Unique identifier of the user to retrieve
 # + return - User record or error if user not found or operation fails
-public isolated function getUserById(string id) returns http:Response|error|User {
-    http:Response response = new;
+public isolated function getUserById(string id) returns error|User {
 
     User|sql:Error foundUser = db->queryRow(getUserByIdQueries(id));
-
-    if foundUser is sql:NoRowsError {
-        response.statusCode = http:STATUS_NOT_FOUND;
-        response.setPayload({
-            status: "Error",
-            messsage: "User not found",
-            searchUserId: id
-        });
-
-        return response;
-    } else if foundUser is sql:Error {
-        return error("Error fetching user: " + foundUser.message());
-    }
 
     return foundUser;
 }
@@ -45,31 +29,11 @@ public isolated function getUserById(string id) returns http:Response|error|User
 #
 # + name - Name of the user to search for
 # + return - HTTP response with search results or error
-public isolated function searchUser(string name) returns http:Response|error {
-    http:Response response = new;
+public isolated function searchUser(string name) returns User|error {
 
     User|sql:Error foundUser = db->queryRow(searchUserQueries(name));
 
-    if foundUser is sql:NoRowsError {
-        response.statusCode = http:STATUS_NOT_FOUND;
-        response.setPayload({
-            status: "error",
-            message: "User not found",
-            searchTerm: name
-        });
-        return response;
-    } else if foundUser is sql:Error {
-        return error("Error fetching user: " + foundUser.message());
-    }
-
-    response.statusCode = http:STATUS_OK;
-    response.setPayload({
-        status: "success",
-        message: "Users found",
-        users: name
-    });
-
-    return response;
+    return foundUser;
 }
 
 # Adds a new user to the database
@@ -87,45 +51,21 @@ public isolated function addUser(User user) returns User|error {
 # + id - Unique identifier of the user to update
 # + user - Updated user details
 # + return - HTTP response indicating success/failure or error
-public isolated function updateUser(string id, User user) returns http:Response|error {
-
-    http:Response response = new;
+public isolated function updateUser(string id, User user) returns User|error|sql:ExecutionResult {
 
     User|sql:Error foundUser = db->queryRow(findUserQuery(id));
 
-    if foundUser is sql:NoRowsError {
-        response.statusCode = http:STATUS_NOT_FOUND
-;
-        response.setPayload({
-            status: "error",
-            message: "User not found",
-            searchUserId: id
-        });
-        return response;
-    } else if foundUser is sql:Error {
+    if foundUser is sql:Error {
         return error("Error fetching user: " + foundUser.message());
     }
 
-    // Update the user in the database
-    sql:ExecutionResult|sql:Error updateResult = db->execute(updateUserQueries(id, user));
+    sql:ExecutionResult|sql:Error updateResult = db->queryRow(updateUserQueries(id, user));
 
     if updateResult is sql:Error {
-        response.statusCode = http:STATUS_INTERNAL_SERVER_ERROR;
-        response.setPayload({
-            status: "error",
-            message: "Failed to update user: " + updateResult.message()
-        });
-        return response;
+        return updateResult;
     }
 
-    response.statusCode = http:STATUS_OK;
-    response.setPayload({
-        status: "success",
-        message: "User updated successfully",
-        updatedUserId: id,
-        affectedRows: updateResult.affectedRowCount
-    });
-    return response;
+    return updateResult;
 
 }
 
@@ -133,40 +73,20 @@ public isolated function updateUser(string id, User user) returns http:Response|
 #
 # + id - Unique identifier of the user to delete
 # + return - HTTP response indicating success/failure or error
-public isolated function deleteUser(string id) returns http:Response|error {
-    http:Response response = new;
+public isolated function deleteUser(string id) returns User|error|sql:ExecutionResult {
 
     User|sql:Error foundUser = db->queryRow(findUserQuery(id));
 
-    if foundUser is sql:NoRowsError {
-        response.statusCode = http:STATUS_NOT_FOUND;
-        response.setPayload({
-            status: "error",
-            message: "user not found",
-            searchedUserId: id
-        });
-        return response;
-    } else if foundUser is sql:Error {
-        return error("Error fetching user: " + foundUser.message());
+    if foundUser is sql:Error {
+        return foundUser;
     }
 
     sql:ExecutionResult|sql:Error deleteResult = db->execute(deleteUserQuery(id));
 
     if deleteResult is sql:Error {
-        response.statusCode = http:STATUS_INTERNAL_SERVER_ERROR;
-        response.setPayload({
-            status: "error",
-            message: "Failed to delete user: " + deleteResult.message()
-        });
-        return response;
+        return deleteResult;
     }
 
-    response.statusCode = http:STATUS_OK;
-    response.setPayload({
-        status: "success",
-        message: "User deleted successfully",
-        deletedUser: "foundUser"
-    });
-    return response;
+    return deleteResult;
 }
 
