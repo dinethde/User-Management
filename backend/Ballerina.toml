@@ -1,6 +1,6 @@
 [package]
 org = "dineth"
-name = "greeter"
+name = "User_Management"
 version = "0.1.0"
 distribution = "2201.12.7"
 

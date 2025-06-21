@@ -1,6 +1,6 @@
 // This module defines the REST API service for user management operations.
 // Provides CRUD endpoints for user entities with proper HTTP status codes.
-import greeter.database as db;
+import User_Management.database as db;
 
 import ballerina/http;
 // import ballerina/io;

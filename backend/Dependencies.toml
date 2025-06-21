@@ -284,10 +284,11 @@ modules = [
 [[package]]
 org = "ballerina"
 name = "task"
-version = "2.7.0"
+version = "2.10.0"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
-	{org = "ballerina", name = "time"}
+	{org = "ballerina", name = "time"},
+	{org = "ballerina", name = "uuid"}
 ]
 
 [[package]]
@@ -304,6 +305,17 @@ name = "url"
 version = "2.6.0"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
+]
+
+[[package]]
+org = "ballerina"
+name = "uuid"
+version = "1.10.0"
+dependencies = [
+	{org = "ballerina", name = "crypto"},
+	{org = "ballerina", name = "jballerina.java"},
+	{org = "ballerina", name = "lang.int"},
+	{org = "ballerina", name = "time"}
 ]
 
 [[package]]
@@ -356,7 +368,7 @@ modules = [
 
 [[package]]
 org = "dineth"
-name = "greeter"
+name = "User_Management"
 version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "http"},
@@ -367,7 +379,7 @@ dependencies = [
 	{org = "ballerinax", name = "mysql.driver"}
 ]
 modules = [
-	{org = "dineth", packageName = "greeter", moduleName = "greeter"},
-	{org = "dineth", packageName = "greeter", moduleName = "greeter.database"}
+	{org = "dineth", packageName = "User_Management", moduleName = "User_Management"},
+	{org = "dineth", packageName = "User_Management", moduleName = "User_Management.database"}
 ]
 
