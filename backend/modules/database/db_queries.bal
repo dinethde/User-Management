@@ -2,7 +2,6 @@
 //
 // This module contains SQL query builders for user operations.
 // All queries are parameterized to prevent SQL injection attacks.
-
 import ballerina/sql;
 
 isolated function initiateDb() returns sql:ParameterizedQuery =>

@@ -3,7 +3,6 @@
 import User_Management.database as db;
 
 import ballerina/http;
-// import ballerina/io;
 import ballerina/io;
 import ballerina/sql;
 import ballerinax/mysql.driver as _;
@@ -15,12 +14,23 @@ listener http:Listener httpListener = new (9090);
 //     init();
 // }
 
+int portNumber = 5173;
+
+@http:ServiceConfig {
+    cors: {
+        allowOrigins: [string `http://localhost:${portNumber}`], // Your React app URL
+        allowCredentials: true,
+        allowHeaders: ["Content-Type", "Authorization"],
+        allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    }
+}
 service / on httpListener {
 
     # Retrieves all users from the database
     #
     # + return - Array of all users or an error if the operation fails
     resource function get users() returns db:User[]|error {
+        io:print("API REQUEST FOR GET ALL USERS RECIEVED");
         return check db:getAllUsers();
     }
 
@@ -143,20 +153,15 @@ service / on httpListener {
     #
     # + id - The unique identifier of the user to delete
     # + return - HTTP response with deleted user data or error response if operation fails
-    resource function delete user/[int id]() returns http:Response|error {
+    resource function delete user/[int id]() returns http:Response|error|User {
 
         http:Response response = new;
 
         User|error deleteUser = db:deleteUser(id);
 
         if deleteUser is User {
-            response.statusCode = http:STATUS_OK;
-            response.setPayload({
-                status: "success",
-                message: "User deleted successfully",
-                deleted: deleteUser
-            });
-            return response;
+            // response.statusCode = http:STATUS_OK;
+            return deleteUser;
         }
 
         if deleteUser is sql:NoRowsError {
