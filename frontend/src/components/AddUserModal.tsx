@@ -17,11 +17,6 @@ function AddUserModal({ data, setData }: AddUserModalProps) {
     email: "",
   });
 
-  async function addUserBg(user: PostUser) {
-    const result = await addUser(user);
-    console.log(result);
-  }
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -30,11 +25,26 @@ function AddUserModal({ data, setData }: AddUserModalProps) {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Form data:", formData);
-    addUserBg(formData);
-    console.log(typeof formData.age);
+
+    try {
+      const newUser = await addUser(formData);
+      console.log("User added successfully:", newUser);
+
+      // Add the new user to the existing data
+      setData([...data, newUser]);
+
+      // Reset the form
+      setFormData({
+        name: "",
+        age: 0,
+        email: "",
+      });
+    } catch (error) {
+      console.error("Error adding user:", error);
+    }
   };
 
   return (
