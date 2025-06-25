@@ -1,6 +1,7 @@
 import axios from "axios";
 import { API_CONFIG } from "../config/api";
 import type { PostUser, User } from "../types/user-type";
+import { use } from "react";
 
 export async function getAllUsers(): Promise<User[]> {
   const result = await axios.get(
@@ -27,4 +28,13 @@ export async function deleteUser(id: string) {
   );
 
   return result.data;
+}
+
+export async function updateUser(user: User) {
+  const updateUser = await axios.put(
+    `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.USER}`,
+    user
+  );
+
+  return updateUser;
 }

@@ -28,6 +28,7 @@ function UserManagement() {
             data={data}
             setData={setData}
             onHandleCloseUserClick={handleCloseUserClick}
+            isOpen={true}
           />
         )}
       </div>

@@ -70,6 +70,15 @@ function UserTable({ data, setData }: UserTableProps) {
     }
   };
 
+  const onUserUpdated = async () => {
+    try {
+      const updatedUsers = await getAllUsers();
+      setData(updatedUsers);
+    } catch (error) {
+      console.error("Failed to refresh user data:", error);
+    }
+  };
+
   // Fetching initial users
   useEffect(() => {
     async function fetchInitialUsers() {
@@ -136,6 +145,7 @@ function UserTable({ data, setData }: UserTableProps) {
           handleCloseModal={handleCloseModal}
           isModalOpen={isModalOpen}
           onUserDeleted={onUserDeleted}
+          onUserUpdated={onUserUpdated}
         />
       </div>
 
