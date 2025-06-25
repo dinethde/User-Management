@@ -1,6 +1,6 @@
 import axios from "axios";
 import { API_CONFIG } from "../config/api";
-import type { User } from "../types/user-type";
+import type { PostUser, User } from "../types/user-type";
 
 export async function getAllUsers(): Promise<User[]> {
   const result = await axios.get(
@@ -10,4 +10,13 @@ export async function getAllUsers(): Promise<User[]> {
   const data = await result.data;
 
   return data;
+}
+
+export async function addUser(data: PostUser): Promise<User> {
+  const result = await axios.post(
+    `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.USER}`,
+    data
+  );
+
+  return result.data;
 }

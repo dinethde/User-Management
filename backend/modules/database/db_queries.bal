@@ -53,7 +53,7 @@ SELECT * FROM users WHERE name = ${name}
 # + return - Parameterized SQL query for inserting user
 isolated function addUserQueries(UpdateUser user) returns sql:ParameterizedQuery =>
 `
-INSERT INTO users (name, age) VALUES (${user.name}, ${user.age})
+INSERT INTO users (name, email, age) VALUES (${user.name}, ${user.email}, ${user.age})
 `;
 
 # Builds query to find a user by ID (alias for getUserByIdQueries)
@@ -73,6 +73,7 @@ isolated function updateUserQueries(int id, UpdateUser user) returns sql:Paramet
 
         UPDATE users 
         SET name = ${user.name}, 
+            email = ${user.email},
             age = ${user.age}
         WHERE id = ${id}
     

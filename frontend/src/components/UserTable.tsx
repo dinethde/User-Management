@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -9,8 +9,12 @@ import type { User } from "../types/user-type";
 import { getAllUsers } from "../services/user-api";
 import InfoModelApp from "./InfoModel";
 
-function UserTable() {
-  const [data, setData] = useState<User[]>([]);
+interface UserTableProps {
+  data: User[];
+  setData: (data: User[]) => void;
+}
+
+function UserTable({ data, setData }: UserTableProps) {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -24,8 +28,11 @@ function UserTable() {
       header: "Name",
     },
     {
+      accessorKey: "email",
+      header: "Email",
+    },
+    {
       accessorKey: "age",
-
       header: "Age",
     },
     {

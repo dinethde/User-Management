@@ -46,6 +46,7 @@ public isolated function addUser(UpdateUser user) returns User|error {
         User newUser = {
             id: generatedId,
             name: user.name,
+            email: user.email,
             age: user.age
         };
         return newUser;
@@ -78,6 +79,7 @@ public isolated function updateUser(int id, UpdateUser user) returns User|error 
     User updatedUser = {
         id: id,
         name: user.name,
+        email: user.email,
         age: user.age
     };
 
@@ -106,6 +108,7 @@ public isolated function deleteUser(int id) returns User|error {
     User deleteUser = {
         id: id,
         name: foundUser.name,
+        email: foundUser.email,
         age: foundUser.age
     };
 
