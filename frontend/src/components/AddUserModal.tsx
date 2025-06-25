@@ -6,9 +6,14 @@ import { addUser } from "../services/user-api";
 interface AddUserModalProps {
   data: User[];
   setData: (data: User[]) => void;
+  onHandleCloseUserClick: () => void;
 }
 
-function AddUserModal({ data, setData }: AddUserModalProps) {
+function AddUserModal({
+  data,
+  setData,
+  onHandleCloseUserClick,
+}: AddUserModalProps) {
   console.log(data);
 
   const [formData, setFormData] = useState<PostUser>({
@@ -53,7 +58,7 @@ function AddUserModal({ data, setData }: AddUserModalProps) {
         {/* Header */}
         <div className="flex flex-row justify-between items-center">
           <h3 className="text-3xl">Add n new user</h3>
-          <button>
+          <button onClick={onHandleCloseUserClick} className="cursor-pointer">
             <img src="/x_vector.svg" className="w-4 h-4" />
           </button>
         </div>

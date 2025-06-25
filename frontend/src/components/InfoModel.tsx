@@ -1,24 +1,35 @@
-import { useState } from "react";
 import type { User } from "../types/user-type";
-import UpdateUser from "./UpdareUserModal";
+import { deleteUser } from "../services/user-api";
 
 interface InfoModelAppProps {
   selectedUser: User | null;
   isModalOpen: boolean;
   handleCloseModal: () => void;
+  onUserDeleted?: () => void;
 }
+
+// function delete
 
 function InfoModelApp({
   handleCloseModal,
   isModalOpen,
   selectedUser,
+  onUserDeleted,
 }: InfoModelAppProps) {
-  const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
+  // const [isUpdateModalOpen, setUpdateModalOpen] = useState(false);
 
-  function handleUpdateUserModalOpen() {
-    setUpdateModalOpen(true);
-  }
-  function handleUpdateUserModalClose() {}
+  const handleDeleteUser = async () => {
+    if (!selectedUser?.id) return;
+
+    try {
+      await deleteUser(selectedUser.id);
+
+      handleCloseModal();
+      onUserDeleted?.();
+    } catch (error) {
+      console.error("Failed to delete user : ", error);
+    }
+  };
 
   return (
     isModalOpen && (
@@ -29,7 +40,7 @@ function InfoModelApp({
         <button className="px-3 py-2 flex gap-2 bg-[#1A1A1A] rounded-sm w-fit whitespace-nowrap ">
           <img src="/update-icon.svg" alt="Update icon" />
           <button
-            onClick={handleUpdateUserModalOpen}
+            // onClick={handleUpdateUserModalOpen}
             className="text-neutral-50"
           >
             Update User
@@ -38,7 +49,9 @@ function InfoModelApp({
 
         <button className="px-3 py-2 flex gap-2 bg-[#1A1A1A] rounded-sm  whitespace-nowrap w-fit">
           <img src="/delete-icon.svg" alt="Delete icon" />
-          <button className="text-neutral-50">Delete User</button>
+          <button className="text-neutral-50" onClick={handleDeleteUser}>
+            Delete User
+          </button>
         </button>
       </div>
     )

@@ -11,12 +11,12 @@
 public type User record {
     readonly int id;
     string name;
-    string email;
+    string? email;
     int age;
 };
 
 public type UpdateUser record {
     string name;
-    string email;
+    string? email;
     int age;
 };

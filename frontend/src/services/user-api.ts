@@ -20,3 +20,11 @@ export async function addUser(data: PostUser): Promise<User> {
 
   return result.data;
 }
+
+export async function deleteUser(id: string) {
+  const result = await axios.delete(
+    `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.USER}/${id}`
+  );
+
+  return result.data;
+}
